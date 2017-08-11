@@ -3,88 +3,89 @@ package goidentity
 import "time"
 
 type User struct {
-	Authenticated bool
-	Domain          string
-	UserName        string
-	DisplayName     string
-	Email           string
-	Human           bool
-	GroupMembership map[string]bool
-	AuthTime        time.Time
+	authenticated   bool
+	domain          string
+	userName        string
+	displayName     string
+	email           string
+	human           bool
+	groupMembership map[string]bool
+	authTime        time.Time
+}
+
+func NewUser(username string) User {
+	return User{
+		userName:        username,
+		groupMembership: make(map[string]bool),
+	}
 }
 
 func (u *User) UserName() string {
-	return u.UserName
+	return u.userName
 }
 
 func (u *User) Domain() string {
-	return u.Domain
+	return u.domain
 }
 
 func (u *User) DisplayName() string {
-	if u.DisplayName == "" {
-		return u.UserName
+	if u.displayName == "" {
+		return u.userName
 	}
-	return u.DisplayName
+	return u.displayName
 }
 
 func (u *User) Human() bool {
-	return u.Human
+	return u.human
 }
 
 func (u *User) AuthTime() time.Time {
-	return u.AuthTime
+	return u.authTime
 }
 
 func (u *User) AuthzAttributes() []string {
-	s := make([]string, len(u.GroupMembership))
+	s := make([]string, len(u.groupMembership))
 	i := 0
-	for a := range u.GroupMembership {
+	for a := range u.groupMembership {
 		s[i] = a
 		i++
 	}
 	return s
 }
 
-func NewUser(username string) User {
-	return User {
-		UserName: username,
-	}
-}
-
 func (u *User) Authenticated() bool {
-	return u.Authenticated
+	return u.authenticated
 }
 
 func (u *User) AddAuthzAttribute(a string) {
-	if enabled, ok := u.GroupMembership[a]; ok && !enabled {
-			u.GroupMembership[a] = true
+	if enabled, ok := u.groupMembership[a]; ok && !enabled {
+		u.groupMembership[a] = true
 	}
-	u.GroupMembership[a] = true
+	u.groupMembership[a] = true
 }
 
 func (u *User) RemoveAuthzAttribute(a string) {
-	if _, ok := u.GroupMembership[a]; !ok {
+	if _, ok := u.groupMembership[a]; !ok {
 		return
 	}
-	delete(u.GroupMembership, a)
+	delete(u.groupMembership, a)
 }
 
 func (u *User) EnableAuthzAttribute(a string) {
-	if enabled, ok := u.GroupMembership[a]; ok && !enabled {
-			u.GroupMembership[a] = true
+	if enabled, ok := u.groupMembership[a]; ok && !enabled {
+		u.groupMembership[a] = true
 	}
 }
 
 func (u *User) DisableAuthzAttribute(a string) {
-	if enabled, ok := u.GroupMembership[a]; ok && enabled {
-			u.GroupMembership[a] = false
+	if enabled, ok := u.groupMembership[a]; ok && enabled {
+		u.groupMembership[a] = false
 	}
 }
 
 func (u *User) Authorized(a string) bool {
-	if enabled, ok := u.GroupMembership[a]; ok && enabled {
-			return true
+	if enabled, ok := u.groupMembership[a]; ok && enabled {
+		return true
 	}
 	return false
 }
