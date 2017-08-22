@@ -2,6 +2,10 @@ package goidentity
 
 import "time"
 
+const (
+	CTXKey = "jcmturner/goidentity"
+)
+
 type Identity interface {
 	UserName() string
 	SetUserName(s string)
