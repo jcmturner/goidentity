@@ -19,4 +19,5 @@ type Identity interface {
 	Authenticated() bool
 	SetAuthenticated(b bool)
 	Authorized(a string) bool
+	SessionID() string
 }

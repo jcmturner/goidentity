@@ -1,6 +1,9 @@
 package goidentity
 
-import "time"
+import (
+	"github.com/hashicorp/go-uuid"
+	"time"
+)
 
 type User struct {
 	authenticated   bool
@@ -11,12 +14,18 @@ type User struct {
 	human           bool
 	groupMembership map[string]bool
 	authTime        time.Time
+	sessionID       string
 }
 
 func NewUser(username string) User {
+	uuid, err := uuid.GenerateUUID()
+	if err != nil {
+		uuid = "00unique-sess-ions-uuid-unavailable0"
+	}
 	return User{
 		userName:        username,
 		groupMembership: make(map[string]bool),
+		sessionID:       uuid,
 	}
 }
 
@@ -109,4 +118,8 @@ func (u *User) Authorized(a string) bool {
 		return true
 	}
 	return false
+}
+
+func (u *User) SessionID() string {
+	return u.sessionID
 }
