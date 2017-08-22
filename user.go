@@ -24,8 +24,16 @@ func (u *User) UserName() string {
 	return u.userName
 }
 
+func (u *User) SetUserName(s string) {
+	u.userName = s
+}
+
 func (u *User) Domain() string {
 	return u.domain
+}
+
+func (u *User) SetDomain(s string) {
+	u.domain = s
 }
 
 func (u *User) DisplayName() string {
@@ -35,12 +43,24 @@ func (u *User) DisplayName() string {
 	return u.displayName
 }
 
+func (u *User) SetDisplayName(s string) {
+	u.displayName = s
+}
+
 func (u *User) Human() bool {
 	return u.human
 }
 
+func (u *User) SetHuman(b bool) {
+	u.human = b
+}
+
 func (u *User) AuthTime() time.Time {
 	return u.authTime
+}
+
+func (u *User) SetAuthTime(t time.Time) {
+	u.authTime = t
 }
 
 func (u *User) AuthzAttributes() []string {
@@ -57,10 +77,11 @@ func (u *User) Authenticated() bool {
 	return u.authenticated
 }
 
+func (u *User) SetAuthenticated(b bool) {
+	u.authenticated = b
+}
+
 func (u *User) AddAuthzAttribute(a string) {
-	if enabled, ok := u.groupMembership[a]; ok && !enabled {
-		u.groupMembership[a] = true
-	}
 	u.groupMembership[a] = true
 }
 
