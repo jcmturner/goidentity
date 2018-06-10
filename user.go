@@ -15,6 +15,7 @@ type User struct {
 	groupMembership map[string]bool
 	authTime        time.Time
 	sessionID       string
+	expiry          time.Time
 }
 
 func NewUser(username string) User {
@@ -122,4 +123,15 @@ func (u *User) Authorized(a string) bool {
 
 func (u *User) SessionID() string {
 	return u.sessionID
+}
+
+func (u *User) SetExpiry(t time.Time) {
+	u.expiry = t
+}
+
+func (u *User) Expired() bool {
+	if !u.expiry.IsZero() && time.Now().UTC().After(u.expiry) {
+		return true
+	}
+	return false
 }

@@ -24,4 +24,5 @@ type Identity interface {
 	SetAuthenticated(b bool)
 	Authorized(a string) bool
 	SessionID() string
+	Expired() bool
 }
