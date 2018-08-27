@@ -25,4 +25,8 @@ type Identity interface {
 	Authorized(a string) bool
 	SessionID() string
 	Expired() bool
+	Attributes() map[string]interface{}
+	SetAttribute(k string, v interface{})
+	SetAttributes(map[string]interface{})
+	RemoveAttribute(k string)
 }
