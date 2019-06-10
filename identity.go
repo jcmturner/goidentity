@@ -1,6 +1,8 @@
 package goidentity
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	CTXKey = "jcmturner/goidentity"
@@ -25,8 +27,10 @@ type Identity interface {
 	Authorized(a string) bool
 	SessionID() string
 	Expired() bool
-	Attributes() map[string]interface{}
-	SetAttribute(k string, v interface{})
-	SetAttributes(map[string]interface{})
+	Attributes() map[string]string
+	SetAttribute(k string, v string)
+	SetAttributes(map[string]string)
 	RemoveAttribute(k string)
+	Marshal() ([]byte, error)
+	Unmarshal([]byte) error
 }

@@ -1,6 +1,8 @@
 package goidentity
 
 import (
+	"bytes"
+	"encoding/gob"
 	"github.com/hashicorp/go-uuid"
 	"time"
 )
@@ -16,7 +18,7 @@ type User struct {
 	authTime        time.Time
 	sessionID       string
 	expiry          time.Time
-	attributes      map[string]interface{}
+	attributes      map[string]string
 }
 
 func NewUser(username string) User {
@@ -137,18 +139,34 @@ func (u *User) Expired() bool {
 	return false
 }
 
-func (u *User) Attributes() map[string]interface{} {
+func (u *User) Attributes() map[string]string {
 	return u.attributes
 }
 
-func (u *User) SetAttribute(k string, v interface{}) {
+func (u *User) SetAttribute(k string, v string) {
 	u.attributes[k] = v
 }
 
-func (u *User) SetAttributes(a map[string]interface{}) {
+func (u *User) SetAttributes(a map[string]string) {
 	u.attributes = a
 }
 
 func (u *User) RemoveAttribute(k string) {
 	delete(u.attributes, k)
+}
+
+func (u *User) Marshal() ([]byte, error) {
+	buf := new(bytes.Buffer)
+	enc := gob.NewEncoder(buf)
+	err := enc.Encode(u)
+	if err != nil {
+		return []byte{}, err
+	}
+	return buf.Bytes(), nil
+}
+
+func (u *User) Unmarshal(b []byte) error {
+	buf := bytes.NewBuffer(b)
+	dec := gob.NewDecoder(buf)
+	return dec.Decode(u)
 }
