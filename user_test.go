@@ -7,6 +7,5 @@ import (
 
 func TestUserImplementsInterface(t *testing.T) {
 	u := new(User)
-	i := new(Identity)
-	assert.Implements(t, i, u, "User type does not implement the Identity interface")
+	assert.Implements(t, (*Identity)(nil), u, "User type does not implement the Identity interface")
 }

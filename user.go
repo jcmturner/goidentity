@@ -18,7 +18,7 @@ type User struct {
 	authTime        time.Time
 	sessionID       string
 	expiry          time.Time
-	attributes      map[string]string
+	attributes      map[string]interface{}
 }
 
 func NewUser(username string) User {
@@ -139,15 +139,15 @@ func (u *User) Expired() bool {
 	return false
 }
 
-func (u *User) Attributes() map[string]string {
+func (u *User) Attributes() map[string]interface{} {
 	return u.attributes
 }
 
-func (u *User) SetAttribute(k string, v string) {
+func (u *User) SetAttribute(k string, v interface{}) {
 	u.attributes[k] = v
 }
 
-func (u *User) SetAttributes(a map[string]string) {
+func (u *User) SetAttributes(a map[string]interface{}) {
 	u.attributes = a
 }
 
